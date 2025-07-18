@@ -9,12 +9,15 @@ COPY .mvn .mvn
 COPY mvnw .
 COPY pom.xml .
 
-# Download Maven dependencies
+# Make mvnw executable (💥 important fix)
+RUN chmod +x mvnw
+
+# Download dependencies
 RUN ./mvnw dependency:go-offline
 
-# Copy entire project and build
+# Copy the rest of the project and build
 COPY . .
 RUN ./mvnw clean install -DskipTests
 
-# Run the jar
+# Run the built jar
 CMD ["java", "-jar", "target/SnapHive-0.0.1-SNAPSHOT.jar"]
